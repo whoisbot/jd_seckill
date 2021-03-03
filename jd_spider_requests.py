@@ -334,9 +334,11 @@ class JdSeckill(object):
         多进程进行抢购
         work_count：进程数量
         """
-        with ProcessPoolExecutor(work_count) as pool:
-            for i in range(work_count):
-                pool.submit(self.seckill)
+        # with ProcessPoolExecutor(work_count) as pool:
+        #     for i in range(work_count):
+        #         pool.submit(self.seckill)
+        # for test
+        self.seckill()
 
     def _reserve(self):
         """
@@ -446,6 +448,7 @@ class JdSeckill(object):
             'Referer': 'https://item.jd.com/{}.html'.format(self.sku_id),
         }
         while True:
+            # todo 获取抢购链接 方法是否正确？
             resp = self.session.get(url=url, headers=headers, params=payload)
             resp_json = parse_json(resp.text)
             if resp_json.get('url'):
@@ -466,6 +469,7 @@ class JdSeckill(object):
         logger.info('用户:{}'.format(self.get_username()))
         logger.info('商品名称:{}'.format(self.get_sku_title()))
         self.timers.start()
+        # todo 获取抢购链接 测试方法是否正确
         self.seckill_url[self.sku_id] = self.get_seckill_url()
         logger.info('访问商品的抢购连接...')
         headers = {
